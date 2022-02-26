@@ -1,0 +1,78 @@
+import requests
+
+url = 'https://zajecia-programowania-xd.pl/flagi'
+
+#print(url)
+
+surowy_text = requests.get(url)
+#print(surowy_text)
+
+text = surowy_text.text
+#print(text)
+#print(type(text))
+
+#lista linkow
+
+lista_linkow = text.split('</p>')
+
+
+linki=[]
+
+for linia in lista_linkow:
+    link = linia.replace('<p>', '')
+    link = link.replace('- ', '')
+    link = link.strip()
+
+    if ' ' in link or '<' in link:
+        continue
+
+    
+    #print( link)
+
+    linki.append(link)
+
+
+
+#liczba .pl, .com, .com.pl
+
+domeny_pl = 0
+domeny_com = 0
+domeny_x =0
+
+w_kropki = 0
+
+for  link in linki:
+    #tylko pl
+    if '.pl' in link and not '.com' in link:
+        domeny_pl += 1
+    #tylko com
+    if '.com' in link and not 'pl' in link:
+        domeny_com += 1
+    #tylko com.pl
+    if ('.pl' in link) and ('.com' in link):
+        domeny_x += 1
+    #policz kropki
+    krpoki = link.count('.')
+    w_kropki += krpoki
+
+print( domeny_pl, ' tylko .pl ')
+print( domeny_com, ' tylko .com ')
+print( domeny_x, ' tylko .com.pl ')
+
+
+print(w_kropki, ' wszystkie kropki ')
+
+
+def policz_domeny_pl(l):
+    domeny_pl1 = 0
+    for  link in l:
+    #tylko pl
+        if '.pl' in link and not '.com' in link:
+            domeny_pl1 += 1
+
+    return domeny_pl1
+
+
+wynik= policz_domeny_pl(linki)
+
+print('policzone linki tylko .pl ', wynik)
